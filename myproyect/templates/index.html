@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Hansel Perez_100323660-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio Web Validador de Cédula</title>
+    <style>
+        .valida { color: green; }
+        .invalida { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Validador de Cédula</h1>
+    <form onsubmit="return false;">
+        <label for="cedula">Número de Cédula:</label>
+        <input type="text" id="cedula" name="cedula" required>
+        <button type="button" onclick="validarCedula()">Validar</button>
+    </form>
+    <div id="resultado"></div>
+
+    <script>
+        function validarCedula() {
+            const cedulaInput = document.getElementById("cedula");
+            const resultadoElement = document.getElementById("resultado");
+            const cedula = cedulaInput.value;
+
+            if (validarCedulaModulo10(cedula)) {
+                resultadoElement.textContent = "Cédula válida.";
+                resultadoElement.classList.remove("invalida");
+                resultadoElement.classList.add("valida");
+            } else {
+                resultadoElement.textContent = "Cédula inválida.";
+                resultadoElement.classList.remove("valida");
+                resultadoElement.classList.add("invalida");
+            }
+        }
+
+        function validarCedulaModulo10(cedula) {
+            if (cedula.length !== 11) {
+                return false;
+            }
+            const cedulaArray = cedula.split("").map(Number).reverse();
+            const suma = cedulaArray.reduce(function (acumulado, digito, index) {
+                if (index % 2 === 1) {
+                    let doble = digito * 2;
+                    if (doble > 9) {
+                        doble -= 9;
+                    }
+                    return acumulado + doble;
+                } else {
+                    return acumulado + digito;
+                }
+            }, 0);
+
+            return suma % 10 === 0;
+        }
+    </script>
+</body>
+</html>
